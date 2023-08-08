@@ -1,0 +1,15 @@
+.navitem {
+    width: 45px;
+  }
+  
+  .imgnavmio {
+    width: 60px;
+    height: auto;
+  }
+h1{
+    color: blue;
+}
+nav {
+    background-color: rgb(5, 15, 160);
+width: 100%;
+}
