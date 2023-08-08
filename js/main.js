@@ -15,7 +15,7 @@ function ingresarCantidad() {
             return cantidad;
             break;
         } else {
-            alert("Ha habido un error al intentar leer la cantidad. Escriba la cantidad en números naturales, por favor.");
+            alert("Ha habido un error al intentar leer la cantidad. Escriba la cantidad en números enteros, por favor.");
         }
     }
 }
