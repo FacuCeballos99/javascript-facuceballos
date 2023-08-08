@@ -6,7 +6,7 @@ function producto(precio, cantidad) {
     return precio * cantidad;
 }
 
-function pedirCantidad() {
+function ingresarCantidad() {
     let numero = false;
     while (!numero) {
         cantidad = parseFloat(prompt("Ingrese la cantidad del producto que desea adquirir:"));
@@ -38,27 +38,27 @@ do {
     codigoProducto = parseFloat(prompt("Ingrese el código del producto que desea añadir al carrito. Si ya eligió todos los productos o quiere terminar la compra ingrese el número 0"));
     switch (codigoProducto) {
         case 1:
-            cantidad = pedirCantidad();
+            cantidad = ingresarCantidad();
             totalCarrito += producto(productos[0].precio, cantidad);
             contador1 += cantidad;
             break;
         case 2:
-            cantidad = pedirCantidad();
+            cantidad = ingresarCantidad();
             totalCarrito += producto(productos[1].precio, cantidad);
             contador2 += cantidad;
             break;
         case 3:
-            cantidad = pedirCantidad();
+            cantidad = ingresarCantidad();
             totalCarrito += producto(productos[2].precio, cantidad);
             contador3 += cantidad;
             break;
         case 4:
-            cantidad = pedirCantidad();
+            cantidad = ingresarCantidad();
             totalCarrito += producto(productos[3].precio, cantidad);
             contador4 += cantidad;
             break;
         case 5:
-            cantidad = pedirCantidad();
+            cantidad = ingresarCantidad();
             totalCarrito += producto(productos[4].precio, cantidad);
             contador5 += cantidad;
             break;
