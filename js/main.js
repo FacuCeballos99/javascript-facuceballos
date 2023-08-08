@@ -41,26 +41,31 @@ do {
             cantidad = ingresarCantidad();
             totalCarrito += producto(productos[0].precio, cantidad);
             contador1 += cantidad;
+            alert('Seleccionaste ' + cantidad + ' Camiseta Titular')
             break;
         case 2:
             cantidad = ingresarCantidad();
             totalCarrito += producto(productos[1].precio, cantidad);
             contador2 += cantidad;
+            alert('Seleccionaste ' + cantidad + ' Camiseta Suplente')
             break;
         case 3:
             cantidad = ingresarCantidad();
             totalCarrito += producto(productos[2].precio, cantidad);
             contador3 += cantidad;
+            alert('Seleccionaste ' + cantidad + ' Short Titular Boca')
             break;
         case 4:
             cantidad = ingresarCantidad();
             totalCarrito += producto(productos[3].precio, cantidad);
             contador4 += cantidad;
+            alert('Seleccionaste ' + cantidad + ' Rompe Viento Boca')
             break;
         case 5:
             cantidad = ingresarCantidad();
             totalCarrito += producto(productos[4].precio, cantidad);
             contador5 += cantidad;
+            alert('Seleccionaste ' + cantidad + ' Pantalon para entrenar')
             break;
         case 0:
             alert(`Su factura final:\nCamiseta Titular......${contador1}\nCamiseta Suplente...............${contador2}\nShort Titular Boca....${contador3}\nRompe Viento Boca.........${contador4}\nPantalón para entrenar....${contador5}\n\nEl total de la compra ha sido $${totalCarrito}`);
