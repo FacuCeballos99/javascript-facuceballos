@@ -13,7 +13,6 @@ function ingresarCantidad() {
         numero = !isNaN(cantidad);
         if (numero && (cantidad > 0)) {
             return cantidad;
-            break;
         } else {
             alert("Ha habido un error al intentar leer la cantidad. Escriba la cantidad en números enteros, por favor.");
         }
@@ -27,6 +26,17 @@ const productos = [
     { nombre: "Rompe Viento Boca", precio: 18000 },
     { nombre: "Pantalón para entrenar", precio: 12000 },
 ];
+// declaracion de los productos con sus codigos
+const productosConCodigos = productos.map((producto, indice) => {
+    return `${indice + 1}-${producto.nombre}`;
+});
+
+//alert con productos disponibles
+alert("Productos disponibles:");
+productosConCodigos.forEach(producto => {
+    alert(producto);
+});
+
 
 let contador1 = 0, contador2 = 0, contador3 = 0, contador4 = 0, contador5 = 0;
 let totalCarrito = 0;
@@ -36,44 +46,59 @@ let cantidad;
 //simulador de carrito
 do {
     codigoProducto = parseFloat(prompt("Ingrese el código del producto que desea añadir al carrito. Si ya eligió todos los productos o quiere terminar la compra ingrese el número 0"));
-    switch (codigoProducto) {
-        case 1:
-            cantidad = ingresarCantidad();
-            totalCarrito += producto(productos[0].precio, cantidad);
-            contador1 += cantidad;
-            alert('Seleccionaste ' + cantidad + ' Camiseta Titular')
-            break;
-        case 2:
-            cantidad = ingresarCantidad();
-            totalCarrito += producto(productos[1].precio, cantidad);
-            contador2 += cantidad;
-            alert('Seleccionaste ' + cantidad + ' Camiseta Suplente')
-            break;
-        case 3:
-            cantidad = ingresarCantidad();
-            totalCarrito += producto(productos[2].precio, cantidad);
-            contador3 += cantidad;
-            alert('Seleccionaste ' + cantidad + ' Short Titular Boca')
-            break;
-        case 4:
-            cantidad = ingresarCantidad();
-            totalCarrito += producto(productos[3].precio, cantidad);
-            contador4 += cantidad;
-            alert('Seleccionaste ' + cantidad + ' Rompe Viento Boca')
-            break;
-        case 5:
-            cantidad = ingresarCantidad();
-            totalCarrito += producto(productos[4].precio, cantidad);
-            contador5 += cantidad;
-            alert('Seleccionaste ' + cantidad + ' Pantalon para entrenar')
-            break;
-        case 0:
-            alert(`Su factura final:\nCamiseta Titular......${contador1}\nCamiseta Suplente...............${contador2}\nShort Titular Boca....${contador3}\nRompe Viento Boca.........${contador4}\nPantalón para entrenar....${contador5}\n\nEl total de la compra ha sido $${totalCarrito}`);
-            break;
-        default:
-            alert("El código ingresado debe coincidir con algún producto, o si desea salir, recuerde ingresar 0");
+    
+    if (codigoProducto >= 1 && codigoProducto <= productos.length) {
+        cantidad = ingresarCantidad();
+        const indiceProducto = codigoProducto - 1;
+        const productoElegido = productos[indiceProducto];
+
+        totalCarrito += producto(productoElegido.precio, cantidad);
+        switch (codigoProducto) {
+            case 1:
+                contador1 += cantidad;
+                break;
+            case 2:
+                contador2 += cantidad;
+                break;
+            case 3:
+                contador3 += cantidad;
+                break;
+            case 4:
+                contador4 += cantidad;
+                break;
+            case 5:
+                contador5 += cantidad;
+                break;
+        }
+        alert(`Seleccionaste ${cantidad} ${productoElegido.nombre}`);
+    } else if (codigoProducto === 0) {
+    } else {
+        alert("El código ingresado debe coincidir con algún producto, o si desea salir, recuerde ingresar 0");
     }
 
-} while (codigoProducto != 0);
+} while (codigoProducto !== 0);
 
+const productosLlevados = [
+    { nombre: "Camiseta Titular", cantidad: contador1, precio: productos[0].precio * contador1 },
+    { nombre: "Camiseta Suplente", cantidad: contador2, precio: productos[1].precio * contador2 },
+    { nombre: "Short Titular Boca", cantidad: contador3, precio: productos[2].precio * contador3 },
+    { nombre: "Rompe Viento Boca", cantidad: contador4, precio: productos[3].precio * contador4 },
+    { nombre: "Pantalón para entrenar", cantidad: contador5, precio: productos[4].precio * contador5 }
+];
+
+// Productos llevados
+alert("Productos llevados:");
+productosLlevados.forEach(producto => {
+    if (producto.cantidad > 0) {
+        alert(`${producto.cantidad} x ${producto.nombre} - Precio: $${producto.precio}`);
+    }
+});
+
+// Calculo del total
+const totalCarritoFinal = productosLlevados.reduce((total, producto) => total + producto.precio, 0);
+
+// Total del carrito
+alert(`Total del carrito: $${totalCarritoFinal}`);
+
+//Mensaje de despedida
 alert("Gracias por su compra en Boca Shop, Vuelva Pronto");
