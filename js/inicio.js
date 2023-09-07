@@ -5,11 +5,14 @@ const inputUsuario = document.querySelector("#username"),
   formulario = document.querySelector("#formulario");
 
 function guardar(valor) {
-    const user = { username: inputUsuario.value, password: inputContraseña.value };
+  const user = {
+    usuario: inputUsuario.value,
+    contraseña: inputContraseña.value,
+  };
     
     valor === "localStorage" &&
     localStorage.setItem("user", JSON.stringify(user));
-  valor === "sessionStorage" &&
+    valor === "sessionStorage" &&
     sessionStorage.setItem("user", JSON.stringify(user));
 }
 
