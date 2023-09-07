@@ -63,7 +63,7 @@ width: 100%;
   
   footer .redes a {
     padding: 1vw 1.5vw;
-    margin: 0.3vw;
+    margin: 0.2vw;
   }
   .colornavmio{
     background-color: rgb(5, 15, 160);
@@ -73,19 +73,18 @@ width: 100%;
   }
   #main__productos img {
     width: 100%;
-    aspect-ratio: 4/4;
     object-fit: cover;
     object-position: center;
   }
   button {
     background-color: rgb(5, 15, 160);
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     color: #fff;
     padding: 0.5rem;
   }
   .producto input {
-    width: 4rem;
+    width: 5rem;
     height: auto;
     text-align: center;
     border: 1px 0;
