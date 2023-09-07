@@ -13,3 +13,100 @@ nav {
     background-color: rgb(5, 15, 160);
 width: 100%;
 }
+#main_login .loginImg {
+  width: 50vw;
+  margin: 0;
+}
+#main_login .loginImg img {
+  width: 100%;
+  height: auto;}
+  #main_login form {
+    margin: 2rem 0;
+    width: 80vw;
+    max-width: 300px;
+  }
+  #main_login form fieldset {
+    width: 110%;
+    margin: 1.2rem 0;
+  }
+  #main_login form fieldset input {
+    border: 1px solid rgb(5, 15, 160);
+    border-bottom: 1px solid rgb(5, 15, 160);
+    margin-left: auto;
+  }
+  footer a {
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    color: azure;
+    margin: 5px;
+    padding: 10px;
+  }
+  
+  .redes i {
+    padding-right: 1vw;
+  }
+  
+  footer h3 {
+    color: azure;
+  }
+  
+  footer a {
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    color: azure;
+  }
+  
+  .piedepagina1 {
+    padding: 15px;
+    margin: 5px;
+  }
+  
+  footer .redes a {
+    padding: 1vw 1.5vw;
+    margin: 0.3vw;
+  }
+  .colornavmio{
+    background-color: rgb(5, 15, 160);
+  }
+  #main__productos {
+    margin-top: 4.5rem;
+  }
+  #main__productos img {
+    width: 100%;
+    aspect-ratio: 4/4;
+    object-fit: cover;
+    object-position: center;
+  }
+  button {
+    background-color: rgb(5, 15, 160);
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    padding: 0.5rem;
+  }
+  .producto input {
+    width: 4rem;
+    height: auto;
+    text-align: center;
+    border: 1px 0;
+    cursor: default;
+  }
+  .producto svg {
+    width: 1.5rem;
+    height: auto;
+  }
+  .producto .modificarCant {
+    background-color: rgb(5, 15, 160);
+    width: 1.5rem;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+  }
+  .producto #eliminar {
+    background-color: transparent;
+    border: none;
+  }
+  .producto #eliminar svg {
+    fill: rgb(114, 6, 6);
+  }
+  
