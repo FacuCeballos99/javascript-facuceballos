@@ -1,0 +1,75 @@
+[
+   {
+      "codigo":1,
+      "nombre":"Camiseta Titular",
+      "imagen":"camisetatitular.png",
+      "cantidad":10,
+      "precio":24000
+   },
+   {
+      "codigo":2,
+      "nombre":"Camiseta Suplente",
+      "imagen":"camisetasuplente.png",
+      "cantidad":8,
+      "precio":24000
+   },
+   {
+      "codigo":3,
+      "nombre":"Camiseta Alternativa",
+      "imagen":"camisetaalternativa.png",
+      "cantidad":6,
+      "precio":24000
+   },
+   {
+      "codigo":5,
+      "nombre":"Camiseta Arquero",
+      "imagen":"camisetaarquero.png",
+      "cantidad":4,
+      "precio":22000
+   },
+   {
+      "codigo":6,
+      "nombre":"Pantalon Entreno",
+      "imagen":"pantalonentreno.png",
+      "cantidad":5,
+      "precio":15000
+   },
+   {
+      "codigo":7,
+      "nombre":"Rompe Vientos",
+      "imagen":"rompeviento.png",
+      "cantidad":7,
+      "precio":18000
+   },
+   {
+      "codigo":8,
+      "nombre":"Buzo Entreno",
+      "imagen":"buzoentreno.png",
+      "cantidad":9,
+      "precio":18000
+   },
+   {
+      "codigo":9,
+      "nombre":"Short Titular",
+      "imagen":"shorttitular.png",
+      "precio":8000
+   },
+   {
+      "codigo":10,
+      "nombre":"Short Suplente",
+      "imagen":"shortsuplente.png",
+      "precio":10000
+   },
+   {
+      "codigo":11,
+      "nombre":"Short Alternativo",
+      "imagen":"shortalternativo.png",
+      "precio":10000
+   },
+   {
+      "codigo":12,
+      "nombre":"Short Arquero",
+      "imagen":"shortarquero.png",
+      "precio":12000
+   }
+]
