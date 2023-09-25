@@ -108,4 +108,12 @@ width: 100%;
   .producto #eliminar svg {
     fill: rgb(114, 6, 6);
   }
-  
+  .nav-principal a svg {
+    fill: #fff;
+  }
+  .nav-principal a svg:hover {
+    fill: #000;
+  }
+  .nav-principal a img:hover {
+    filter: invert(100%);
+  }
