@@ -148,12 +148,13 @@ const actualizarLS = () => {
 fetch("../data/products.json")
     .then(response => response.json())
     .then(data => {
-        productos = data;
+        const productos = data;
         const comprar = document.querySelectorAll(".btnComprar");
 
         comprar.forEach((element, index) => {
             element.addEventListener("click", () => {
-                let buscado = productos[index].nombre;
+                const { nombre, imagen } = productos[index];
+                const buscado = nombre;
 
                 const filtrado = carrito.filter((elem) => elem.nombre === buscado);
 
@@ -165,10 +166,10 @@ fetch("../data/products.json")
 
                     Swal.fire({
                         position: 'top-end',
-                        imageUrl: `../img/products/${productos[index].imagen}`,
+                        imageUrl: `../img/products/${imagen}`,
                         imageHeight: 100,
-                        imageAlt: `Compro ${productos[index].nombre}`,
-                        title: `${productos[index].nombre}`,
+                        imageAlt: `Compro ${nombre}`,
+                        title: `${nombre}`,
                         text: 'Se añadió a su carrito',
                         showConfirmButton: false,
                         timer: 1500,
@@ -189,7 +190,7 @@ fetch("../data/products.json")
 
                             Toast.fire({
                                 icon: 'success',
-                                title: `Añadiste otro ${productos[index].nombre} al carrito`,
+                                title: `Añadiste otro ${nombre} al carrito`,
                             });
                         }
                     });
