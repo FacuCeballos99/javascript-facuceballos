@@ -2,21 +2,22 @@
 const main_productos = document.getElementById("main_productos");
 
 const llenarMainProductos = (arr) => {
-    main_productos.innerHTML = ""; // Limpia el contenido antes de llenarlo de nuevo
-    arr.forEach((el) => {
-        const { imagen, nombre, precio } = el;
+    main_productos.innerHTML = "";
+    arr.forEach((el, index) => {
+        const { imagen, nombre, precio, codigo } = el;
         main_productos.innerHTML += `
         <section class="producto col-5 col-lg-3 m-2 my-lg-3 mx-lg-2 d-flex flex-column align-items-center">
             <img src="../img/products/${imagen}">
             <h3 class="nombre">${nombre}</h3>
             <h3><b>$${precio}</b></h3>
-            <button type="button" name="comprar" class="btnComprar">Comprar</button>
+            <button type="button" name="comprar" class="btnComprar" data-index="${index}" data-codigo="${codigo}">Comprar</button>
         </section>
         `;
     });
-}
+};
 
-// Buscador de productos
+// Resto de tu código para el buscador y obtener productos desde JSON...
+
 const buscador = document.getElementById("buscador");
 
 function filtrarProducto(arr, filtro) {
@@ -62,16 +63,60 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// Filtrado de productos
-buscador.addEventListener("input", (e) => {
-    const filtro = e.target.value;
-    const filtrado = filtrarProducto(productos, filtro);
-    llenarMainProductos(filtrado);
-});
-
+// Evento para mostrar el buscador
 const search = document.getElementById("search");
 search.addEventListener("click", () => {
     buscador.style.display = buscador.style.display === "block" ? "none" : "block";
+});
+
+// Evento para comprar productos
+main_productos.addEventListener("click", (e) => {
+    if (e.target.classList.contains("btnComprar")) {
+        const index = e.target.getAttribute("data-index");
+        const codigo = e.target.getAttribute("data-codigo");
+        const { nombre, imagen } = productos[index];
+        const buscado = nombre;
+
+        const filtrado = carrito.filter((elem) => elem.nombre === buscado);
+
+        if (filtrado.length === 0) {
+            productos[index].cantidad = 1;
+            carrito.push(productos[index]);
+            actualizarContador();
+            actualizarLS();
+
+            Swal.fire({
+                position: 'top-end',
+                imageUrl: `../img/products/${imagen}`,
+                imageHeight: 100,
+                imageAlt: `Compró ${nombre}`,
+                title: `${nombre}`,
+                text: 'Se añadió a su carrito',
+                showConfirmButton: false,
+                timer: 1500,
+                width: '20rem',
+            });
+        } else {
+            carrito.forEach((element) => {
+                if (element.nombre === buscado) {
+                    element.cantidad++;
+                    actualizarLS();
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+
+                    Toast.fire({
+                        icon: 'success',
+                        title: `Añadiste otro ${nombre} al carrito`,
+                    });
+                }
+            });
+        }
+    }
 });
 
 // Obtener el carrito del localStorage y llenado
@@ -85,7 +130,7 @@ const actualizarContador = () => {
 };
 
 const llenarCarrito = (arr, html) => {
-    html.innerHTML = ""; 
+    html.innerHTML = "";
     arr.forEach((element) => {
         const { codigo, imagen, precio, nombre, cantidad } = element;
         const total = precio * cantidad;
@@ -111,7 +156,7 @@ const llenarCarrito = (arr, html) => {
         </div>
         `;
     });
-}
+};
 
 const calcularTotal = (arr, html) => {
     let sumatoria = arr.reduce((total, element) => total + element.precio * element.cantidad, 0);
@@ -119,8 +164,64 @@ const calcularTotal = (arr, html) => {
     <h3>Total: $${sumatoria}</h3>
     <button class="w-100" type="button" name="pagar" id="btnPagar" onClick="pagar()">Pagar</button>
     `;
-}
+};
 
+// Resto de tu código para mostrar y gestionar el carrito...
+
+// Botón modificar cantidad
+const restarCant = (codigo) => {
+    carrito.forEach((element) => {
+        if (element.codigo === codigo) {
+            if (element.cantidad > 1) {
+                element.cantidad--;
+                actualizarLS();
+            } else {
+                eliminarProducto(codigo);
+            }
+        }
+    });
+};
+
+const sumarCant = (codigo) => {
+    carrito.forEach((element) => {
+        if (element.codigo === codigo) {
+            element.cantidad++;
+            actualizarLS();
+        }
+    });
+};
+
+// Botón eliminar producto
+const eliminarProducto = (codigo) => {
+    carrito = carrito.filter((element) => element.codigo !== codigo);
+    actualizarLS();
+    actualizarContador();
+};
+
+// Botón pagar
+const pagar = () => {
+    carrito = [];
+    actualizarLS();
+    actualizarContador();
+    Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'Compra realizada',
+        showConfirmButton: false,
+        timer: 1500,
+        width: '20rem',
+    });
+    carrito = [];
+    actualizarLS();
+    actualizarContador();
+    cuerpoCarrito.innerHTML = `
+    <p>
+        No hay productos en el carrito
+    </p>
+    `;
+};
+
+// Mostrar el carrito al cargar la página
 if (carrito.length === 0) {
     cuerpoCarrito.innerHTML = `
     <p>
@@ -133,122 +234,14 @@ if (carrito.length === 0) {
     actualizarContador();
 }
 
-// Botón comprar
+// Funciones para actualizar el Local Storage
 const obtenerLS = () => {
     localStorage.setItem("carrito", JSON.stringify(carrito));
-}
+};
 
 const actualizarLS = () => {
     obtenerLS();
     cuerpoCarrito.innerHTML = "";
     llenarCarrito(carrito, cuerpoCarrito);
     calcularTotal(carrito, cuerpoCarrito);
-}
-
-fetch("../data/products.json")
-    .then(response => response.json())
-    .then(data => {
-        const productos = data;
-        const comprar = document.querySelectorAll(".btnComprar");
-
-        comprar.forEach((element, index) => {
-            element.addEventListener("click", () => {
-                const { nombre, imagen } = productos[index];
-                const buscado = nombre;
-
-                const filtrado = carrito.filter((elem) => elem.nombre === buscado);
-
-                if (filtrado.length === 0) {
-                    productos[index].cantidad = 1;
-                    carrito.push(productos[index]);
-                    actualizarContador();
-                    actualizarLS();
-
-                    Swal.fire({
-                        position: 'top-end',
-                        imageUrl: `../img/products/${imagen}`,
-                        imageHeight: 100,
-                        imageAlt: `Compro ${nombre}`,
-                        title: `${nombre}`,
-                        text: 'Se añadió a su carrito',
-                        showConfirmButton: false,
-                        timer: 1500,
-                        width: '20rem',
-                    });
-                } else {
-                    carrito.forEach((element) => {
-                        if (element.nombre === buscado) {
-                            element.cantidad++;
-                            actualizarLS();
-
-                            const Toast = Swal.mixin({
-                                toast: true,
-                                position: 'top-end',
-                                showConfirmButton: false,
-                                timer: 1500,
-                            });
-
-                            Toast.fire({
-                                icon: 'success',
-                                title: `Añadiste otro ${nombre} al carrito`,
-                            });
-                        }
-                    });
-                }
-            });
-        });
-    });
-
-// Botón eliminar
-function eliminarProducto(elem) {
-    carrito = carrito.filter((element) => element.codigo !== elem);
-    actualizarLS();
-    actualizarContador();
-    Swal.fire({
-        position: 'top-end',
-        title: `${nombre}`,
-        text: 'Se eliminó del carrito',
-        showConfirmButton: false,
-        timer: 1500,
-        width: '20rem',
-    });
-
-    if (carrito.length === 0) {
-        cuerpoCarrito.innerHTML = `
-        <p>
-            No hay productos en el carrito
-        </p>
-        `;
-    }
-}
-
-// Cambio de cantidad
-function restarCant(elem) {
-    carrito.forEach((element) => {
-        if (element.codigo === elem && element.cantidad > 1) {
-            element.cantidad--;
-            actualizarLS();
-        }
-    });
-}
-
-function sumarCant(elem) {
-    carrito.forEach((element) => {
-        if (element.codigo === elem) {
-            element.cantidad++;
-            actualizarLS();
-        }
-    });
-}
-
-// Botón pagar
-function pagar() {
-    cuerpoCarrito.innerHTML = `
-    <p>
-        Gracias por su compra
-    </p>
-    `;
-    carrito = [];
-    actualizarLS();
-    actualizarContador();
-}
+};
