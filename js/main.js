@@ -1,27 +1,33 @@
+// ActualizarLS
+const actualizarLS = () => {
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+}
+
 // Llenado de productos en carrito
 const main_productos = document.getElementById("main_productos");
 
 const llenarMainProductos = (arr) => {
     main_productos.innerHTML = "";
-    arr.forEach((el, index) => {
-        const { imagen, nombre, precio, codigo } = el;
+    arr.forEach((el) => {
+        const { imagen, nombre, precio } = el;
         main_productos.innerHTML += `
         <section class="producto col-5 col-lg-3 m-2 my-lg-3 mx-lg-2 d-flex flex-column align-items-center">
             <img src="../img/products/${imagen}">
             <h3 class="nombre">${nombre}</h3>
             <h3><b>$${precio}</b></h3>
-            <button type="button" name="comprar" class="btnComprar" data-index="${index}" data-codigo="${codigo}">Comprar</button>
+            <button type="button" name="comprar" class="btnComprar">Comprar</button>
         </section>
         `;
     });
-};
+}
 
-// Resto de tu código para el buscador y obtener productos desde JSON...
-
+// Buscador de productos
 const buscador = document.getElementById("buscador");
 
 function filtrarProducto(arr, filtro) {
+
     const filtroEnMinuscula = filtro.toLowerCase();
+    
     const filtrado = arr.filter((el) => {
         const { nombre } = el;
         const nombreEnMinuscula = nombre.toLowerCase();
@@ -34,7 +40,7 @@ const getMostrarSS = () => {
     return sessionStorage.getItem("mostrar");
 }
 
-const removeMostrarSS = () => {
+const removeMostrar = () => {
     sessionStorage.removeItem("mostrar");
 }
 
@@ -63,60 +69,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// Evento para mostrar el buscador
+// Filtrado de productos
+buscador.addEventListener("input", (e) => {
+    const filtro = e.target.value;
+    const filtrado = filtrarProducto(productos, filtro);
+    llenarMainProductos(filtrado);
+});
+
 const search = document.getElementById("search");
 search.addEventListener("click", () => {
     buscador.style.display = buscador.style.display === "block" ? "none" : "block";
-});
-
-// Evento para comprar productos
-main_productos.addEventListener("click", (e) => {
-    if (e.target.classList.contains("btnComprar")) {
-        const index = e.target.getAttribute("data-index");
-        const codigo = e.target.getAttribute("data-codigo");
-        const { nombre, imagen } = productos[index];
-        const buscado = nombre;
-
-        const filtrado = carrito.filter((elem) => elem.nombre === buscado);
-
-        if (filtrado.length === 0) {
-            productos[index].cantidad = 1;
-            carrito.push(productos[index]);
-            actualizarContador();
-            actualizarLS();
-
-            Swal.fire({
-                position: 'top-end',
-                imageUrl: `../img/products/${imagen}`,
-                imageHeight: 100,
-                imageAlt: `Compró ${nombre}`,
-                title: `${nombre}`,
-                text: 'Se añadió a su carrito',
-                showConfirmButton: false,
-                timer: 1500,
-                width: '20rem',
-            });
-        } else {
-            carrito.forEach((element) => {
-                if (element.nombre === buscado) {
-                    element.cantidad++;
-                    actualizarLS();
-
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 1500,
-                    });
-
-                    Toast.fire({
-                        icon: 'success',
-                        title: `Añadiste otro ${nombre} al carrito`,
-                    });
-                }
-            });
-        }
-    }
 });
 
 // Obtener el carrito del localStorage y llenado
@@ -130,7 +92,7 @@ const actualizarContador = () => {
 };
 
 const llenarCarrito = (arr, html) => {
-    html.innerHTML = "";
+    html.innerHTML = ""; 
     arr.forEach((element) => {
         const { codigo, imagen, precio, nombre, cantidad } = element;
         const total = precio * cantidad;
@@ -156,72 +118,16 @@ const llenarCarrito = (arr, html) => {
         </div>
         `;
     });
-};
+}
 
 const calcularTotal = (arr, html) => {
     let sumatoria = arr.reduce((total, element) => total + element.precio * element.cantidad, 0);
-    html.innerHTML = `
+    html.innerHTML += `
     <h3>Total: $${sumatoria}</h3>
     <button class="w-100" type="button" name="pagar" id="btnPagar" onClick="pagar()">Pagar</button>
     `;
-};
+}
 
-// Resto de tu código para mostrar y gestionar el carrito...
-
-// Botón modificar cantidad
-const restarCant = (codigo) => {
-    carrito.forEach((element) => {
-        if (element.codigo === codigo) {
-            if (element.cantidad > 1) {
-                element.cantidad--;
-                actualizarLS();
-            } else {
-                eliminarProducto(codigo);
-            }
-        }
-    });
-};
-
-const sumarCant = (codigo) => {
-    carrito.forEach((element) => {
-        if (element.codigo === codigo) {
-            element.cantidad++;
-            actualizarLS();
-        }
-    });
-};
-
-// Botón eliminar producto
-const eliminarProducto = (codigo) => {
-    carrito = carrito.filter((element) => element.codigo !== codigo);
-    actualizarLS();
-    actualizarContador();
-};
-
-// Botón pagar
-const pagar = () => {
-    carrito = [];
-    actualizarLS();
-    actualizarContador();
-    Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'Compra realizada',
-        showConfirmButton: false,
-        timer: 1500,
-        width: '20rem',
-    });
-    carrito = [];
-    actualizarLS();
-    actualizarContador();
-    cuerpoCarrito.innerHTML = `
-    <p>
-        No hay productos en el carrito
-    </p>
-    `;
-};
-
-// Mostrar el carrito al cargar la página
 if (carrito.length === 0) {
     cuerpoCarrito.innerHTML = `
     <p>
@@ -234,14 +140,189 @@ if (carrito.length === 0) {
     actualizarContador();
 }
 
-// Funciones para actualizar el Local Storage
-const obtenerLS = () => {
-    localStorage.setItem("carrito", JSON.stringify(carrito));
-};
+document.addEventListener("DOMContentLoaded", function () {
+    // Botón comprar
+    const obtenerLS = () => {
+        localStorage.setItem("carrito", JSON.stringify(carrito));
+    }
 
-const actualizarLS = () => {
-    obtenerLS();
-    cuerpoCarrito.innerHTML = "";
-    llenarCarrito(carrito, cuerpoCarrito);
-    calcularTotal(carrito, cuerpoCarrito);
-};
+    const actualizarLS = () => {
+        obtenerLS();
+        cuerpoCarrito.innerHTML = "";
+        llenarCarrito(carrito, cuerpoCarrito);
+        calcularTotal(carrito, cuerpoCarrito);
+    }
+
+    fetch("../data/products.json")
+        .then(response => response.json())
+        .then(data => {
+            const productos = data;
+            const comprar = document.querySelectorAll(".btnComprar");
+
+            comprar.forEach((element, index) => {
+                element.addEventListener("click", () => {
+                    const { nombre, imagen } = productos[index];
+                    const buscado = nombre;
+
+                    const filtrado = carrito.filter((elem) => elem.nombre === buscado);
+
+                    if (filtrado.length === 0) {
+                        productos[index].cantidad = 1;
+                        carrito.push(productos[index]);
+                        actualizarContador();
+                        actualizarLS();
+
+                        Swal.fire({
+                            position: 'top-end',
+                            imageUrl: `../img/products/${imagen}`,
+                            imageHeight: 100,
+                            imageAlt: `Compro ${nombre}`,
+                            title: `${nombre}`,
+                            text: 'Se añadió a su carrito',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            width: '20rem',
+                        });
+                    } else {
+                        carrito.forEach((element) => {
+                            if (element.nombre === buscado) {
+                                element.cantidad++;
+                                actualizarLS();
+
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                });
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: `Añadiste otro ${nombre} al carrito`,
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        });
+});
+
+
+function eliminarProducto(elem) {
+    const index = carrito.findIndex((element) => element.codigo === elem);
+
+    if (index !== -1) {
+        const { nombre } = carrito[index];
+
+        Swal.fire({
+            title: `¿Eliminar ${nombre} del carrito?`,
+            text: "Eliminarás este producto del carrito",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: 'rgb(5, 15, 160)',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, eliminar!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                carrito.splice(index, 1);
+                actualizarContador();
+                actualizarLS();
+                llenarCarrito(carrito, cuerpoCarrito); 
+            
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            
+                Toast.fire({
+                    icon: 'error',
+                    title: `${nombre} eliminado del carrito`
+                });
+            
+                if (carrito.length === 0) {
+                    cuerpoCarrito.innerHTML = "";
+                    cuerpoCarrito.innerHTML = `
+                    <p>
+                        No hay productos en el carrito
+                    </p>
+                    `;
+                } else {
+                    document.getElementById("btnPagar").style.display = "block";
+                }
+            }
+        }
+    )}
+}
+
+            
+
+
+// Cambio de cantidad
+function restarCant(elem){
+    carrito.forEach((element) => {
+        const {codigo, cantidad} = element
+        if(codigo === elem){
+            if(cantidad > 1){
+                element.cantidad--;
+                actualizarLS();
+                llenarCarrito(carrito, cuerpoCarrito);
+                calcularTotal(carrito, cuerpoCarrito);
+            }
+        }
+})
+}
+
+function sumarCant(elem){
+    carrito.forEach((element) => {
+        const {codigo} = element
+        if(codigo === elem){
+            element.cantidad++;
+            actualizarLS();
+            llenarCarrito(carrito, cuerpoCarrito);
+            calcularTotal(carrito, cuerpoCarrito);
+        }
+})
+}
+
+// Boton de pagar
+function pagar(){
+
+    Swal.fire({
+        title: '¿Desea finalizar la compra?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: 'rgb(5, 15, 160)',
+        cancelButtonColor: 'rgb(5, 15, 160)',
+        cancelButtonText: 'Seguir comprando',
+        confirmButtonText: 'Finalizar compra'
+}).then((result) => {
+    if (result.isConfirmed){
+
+        localStorage.removeItem("carrito");
+        contadorCarrito.innerHTML = 0;
+        cuerpoCarrito.innerHTML = "";
+        cuerpoCarrito.innerHTML = `
+        <p>
+            No hay productos en el carrito
+        </p>
+        `;
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'center',
+            showConfirmButton: false,
+            timer: 1800,
+        })
+
+        Toast.fire({
+            icon: 'success',
+            title: 'Su compra fue realizada con exito'
+        })
+    }
+})
+}
+
