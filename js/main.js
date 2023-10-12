@@ -54,7 +54,14 @@ const fetchData = async () => {
             throw new Error("Error al obtener los datos.");
         }
         productos = await res.json();
-        llenarMainProductos(productos);
+        const mostrar = getMostrarSS();
+        if (mostrar) {
+            buscador.value = mostrar;
+            const filtrado = filtrarProducto(productos, mostrar);
+            llenarMainProductos(filtrado);
+        } else {
+            llenarMainProductos(productos);
+        }
     } catch (error) {
         console.error(error);
     }
@@ -229,20 +236,8 @@ function eliminarProducto(elem) {
                 carrito.splice(index, 1);
                 actualizarContador();
                 actualizarLS();
-                llenarCarrito(carrito, cuerpoCarrito); 
-            
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            
-                Toast.fire({
-                    icon: 'error',
-                    title: `${nombre} eliminado del carrito`
-                });
-            
+                llenarCarrito(carrito, cuerpoCarrito);
+
                 if (carrito.length === 0) {
                     cuerpoCarrito.innerHTML = "";
                     cuerpoCarrito.innerHTML = `
@@ -250,13 +245,25 @@ function eliminarProducto(elem) {
                         No hay productos en el carrito
                     </p>
                     `;
-                } else {
-                    document.getElementById("btnPagar").style.display = "block";
+                    document.getElementById("btnPagar").style.display = "none"; // Ocultar el botón de pagar
                 }
+
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+
+                Toast.fire({
+                    icon: 'error',
+                    title: `${nombre} eliminado del carrito`
+                });
             }
-        }
-    )}
+        });
+    }
 }
+
 
             
 
@@ -310,6 +317,7 @@ function pagar(){
             No hay productos en el carrito
         </p>
         `;
+        carrito = [];
 
         const Toast = Swal.mixin({
             toast: true,
